@@ -20,13 +20,7 @@ function NewReservation(){
 
     function handleSubmit(event){
         event.preventDefault()
-        axios.post("/reservations/new", formData)
-        .then((response) => {
-            console.log("Response:", response.data)
-        })
-        .catch((error) => {
-            console.log("Error:", error)
-        })
+        axios.post("http://localhost:5001/reservations/new", {data: formData})
         setFormData(initialFormData)
     }
 
