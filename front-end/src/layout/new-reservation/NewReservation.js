@@ -26,7 +26,7 @@ function NewReservation(){
 
     async function handleSubmit(event){
         event.preventDefault()
-        await axios.post("http://localhost:5001/reservations/new", {data: formData})
+        await axios.post("http://localhost:5001/reservations", {data: formData})
         history.push(`/dashboard?date=${formData.reservation_date}`)
     }
 
