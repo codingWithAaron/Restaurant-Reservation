@@ -13,6 +13,24 @@ function NewReservation(){
         people: 1,
     }
     const [formData, setFormData] = useState(initialFormData)
+    const [isTuesday, setIsTuesday] = useState(false)
+    const [isPastDate, setIsPastDate] = useState(false)
+
+    function isDateTuesday(date){
+        const selectedDate = new Date(`${date}T00:00:00`)
+        const dayOfWeek = selectedDate.getUTCDay()
+
+        return dayOfWeek === 2
+    }
+
+    function isDateInPast(date){
+        const selectedDate = new Date(`${date}T00:00:00`)
+        const currentDate = new Date()
+
+        selectedDate.setHours(0, 0, 0, 0)
+        currentDate.setHours(0, 0, 0, 0)
+        return selectedDate < currentDate
+    }
 
     function handleCancel(){
      history.goBack()
@@ -22,6 +40,15 @@ function NewReservation(){
         let newFormData = {...formData}
         newFormData[event.target.name] = event.target.value
         setFormData(newFormData)
+
+        if(event.target.name === "reservation_date"){
+            setIsTuesday(isDateTuesday(event.target.value))
+            if(isDateInPast(event.target.value)){
+                setIsPastDate(true)
+            }else{
+                setIsPastDate(false)
+            }
+        }
     }
 
     async function handleSubmit(event){
@@ -54,6 +81,10 @@ function NewReservation(){
 
                     <button type="submit">Submit</button>
                     <button onClick={handleCancel}>Cancel</button>
+
+                    {isTuesday && !isPastDate ? <div className="alert alert-danger"><p>The restaurant is closed on Tuesdays. Please choose another day.</p></div> : ""}
+                    {isPastDate && !isTuesday ? <div className="alert alert-danger"><p>You picked a date that is in the past. Please choose a different date.</p></div> : ""}
+                    {isTuesday && isPastDate ? <div className="alert alert-danger"><p>The restaurant is closed on Tuesdays. Please choose another day.</p> <p>You also picked a date that is in the past. Please choose a different date.</p></div> : ""}
                 </form>
             </div>
         </>
