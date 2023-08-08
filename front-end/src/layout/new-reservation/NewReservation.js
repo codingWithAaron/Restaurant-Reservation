@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios"
+import { useHistory } from 'react-router-dom';
 
 function NewReservation(){
+    const history = useHistory()
     const initialFormData = {
         first_name: "",
         last_name: "",
@@ -12,16 +14,20 @@ function NewReservation(){
     }
     const [formData, setFormData] = useState(initialFormData)
 
+    function handleCancel(){
+     history.goBack()
+    }
+
     function handleChange(event){
         let newFormData = {...formData}
         newFormData[event.target.name] = event.target.value
         setFormData(newFormData)
     }
 
-    function handleSubmit(event){
+    async function handleSubmit(event){
         event.preventDefault()
-        axios.post("http://localhost:5001/reservations/new", {data: formData})
-        setFormData(initialFormData)
+        await axios.post("http://localhost:5001/reservations/new", {data: formData})
+        history.push(`/dashboard?date=${formData.reservation_date}`)
     }
 
     return (
@@ -47,7 +53,7 @@ function NewReservation(){
                     <input id="people" name="people" type="number" min={1} required value={formData.people} onChange={handleChange} />
 
                     <button type="submit">Submit</button>
-                    <button>Cancel</button>
+                    <button onClick={handleCancel}>Cancel</button>
                 </form>
             </div>
         </>
