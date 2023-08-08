@@ -85,6 +85,33 @@ function validateFirstName(req, res, next){
 
 }
 
+function validateDateIsNotTuesday(req, res, next){
+  const date = req.body.data.reservation_date
+  const selectedDate = new Date(`${date}T00:00:00`)
+  const dayOfWeek = selectedDate.getUTCDay()
+
+  if(dayOfWeek === 2){
+    return next({ status: 400, message: "The restuarant is closed. Please choose another day."})
+  }else{
+    next()
+  }
+}
+
+function validateDateIsNotPast(req, res, next){
+  const date = req.body.data.reservation_date
+  const selectedDate = new Date(`${date}T00:00:00`)
+  const currentDate = new Date()
+
+  selectedDate.setHours(0, 0, 0, 0)
+  currentDate.setHours(0, 0, 0, 0)
+
+  if(selectedDate < currentDate){
+    return next({ status: 400, message: "The date is in the past. Please choose today's date or one in the future."})
+  }else{
+    next()
+  }
+}
+
 async function list(req, res) {
   const date = JSON.stringify(req.query.date)
   const data = await service.list(date)
@@ -111,6 +138,8 @@ module.exports = {
     validatePhoneNumber,
     validateLastName,
     validateFirstName,
+    validateDateIsNotTuesday,
+    validateDateIsNotPast,
     asyncErrorBoundary(create)
   ]
 };
