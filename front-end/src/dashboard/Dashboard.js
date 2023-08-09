@@ -4,6 +4,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 import useQuery from "../utils/useQuery";
 import { useRouteMatch } from "react-router-dom/cjs/react-router-dom";
 import { today } from "../utils/date-time";
+import ReservationCard from "./ReservationCard";
 
 /**
  * Defines the dashboard page.
@@ -50,7 +51,7 @@ function Dashboard({ date }) {
           <h4 className="mb-0">Reservations for date: {currentDate}</h4>
         </div>
         <ErrorAlert error={reservationsError} />
-        {JSON.stringify(reservations)}
+        {reservations.map((reservation)=> <ReservationCard reservation={reservation} key={reservation.reservation_id}/>)}
       </main>
     );
   }else{
