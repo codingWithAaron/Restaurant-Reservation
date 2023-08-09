@@ -71,12 +71,6 @@ function CreateReservation(){
             }else{
                 setBefore1030(false)
             }
-
-            if(isAfter9(event.target.value)){
-                setAfter930(true)
-            }else{
-                setAfter930(false)
-            }
         }
     }
 
@@ -86,6 +80,13 @@ function CreateReservation(){
         const formDataCorrectTypes = {
             ...formData,
             people: Number(formData.people)
+        }
+
+        if(formData.reservation_time){
+            if(isAfter9(formData.reservation_time)){
+                setAfter930(true)
+                return
+            }
         }
         
         try {
