@@ -4,7 +4,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 import useQuery from "../utils/useQuery";
 import { useRouteMatch } from "react-router-dom/cjs/react-router-dom";
 import { today, previous, next } from "../utils/date-time";
-import ReservationCard from "./ReservationCard";
+import EachReservation from "./EachReservation";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 /**
@@ -78,7 +78,7 @@ function Dashboard({ date }) {
         </div>
         <ErrorAlert error={reservationsError} />
         {reservations.map((reservation) => (
-          <ReservationCard
+          <EachReservation
             reservation={reservation}
             key={reservation.reservation_id}
           />

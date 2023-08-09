@@ -1,6 +1,6 @@
 import React from "react";
 
-function ReservationCard({ reservation }) {
+function EachReservation({ reservation }) {
   return (
     <>
       <div className="card mb-3">
@@ -26,4 +26,4 @@ function ReservationCard({ reservation }) {
   );
 }
 
-export default ReservationCard;
+export default EachReservation;
