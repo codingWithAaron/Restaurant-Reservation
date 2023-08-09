@@ -4,7 +4,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 import useQuery from "../utils/useQuery";
 import { useRouteMatch } from "react-router-dom/cjs/react-router-dom";
 import { today, previous, next } from "../utils/date-time";
-import EachReservation from "./EachReservation";
+import EachReservation from "../reservations/EachReservation";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 /**
