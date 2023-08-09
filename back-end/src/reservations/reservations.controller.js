@@ -112,6 +112,19 @@ function validateDateIsNotPast(req, res, next){
   }
 }
 
+function validateTime(req, res, next){
+  const time = req.body.data.reservation_time
+  const selectedTime = new Date(`1970-01-01T${time}`)
+  const earliestTime = new Date(`1970-01-01T10:30:00`)
+  const latestTime = new Date(`1970-01-01T21:30:00`)
+
+  if(selectedTime < earliestTime || selectedTime > latestTime){
+    return next({status: 400, message: "Please choose a time within business hours."})
+  }else{
+    next()
+  }
+}
+
 async function list(req, res) {
   const date = JSON.stringify(req.query.date)
   const data = await service.list(date)
@@ -140,6 +153,7 @@ module.exports = {
     validateFirstName,
     validateDateIsNotTuesday,
     validateDateIsNotPast,
+    validateTime,
     asyncErrorBoundary(create)
   ]
 };
