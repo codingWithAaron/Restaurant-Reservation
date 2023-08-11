@@ -23,8 +23,8 @@ function Form({handleSubmit, handleChange, handleCancel, formData, isTuesday, is
                     <label htmlFor="people">Number of People:</label>
                     <input id="people" name="people" type="number" min={1} required value={formData.people} onChange={handleChange} />
 
-                    <button type="submit">Submit</button>
-                    <button onClick={handleCancel}>Cancel</button>
+                    <button className="ml-2" type="submit">Submit</button>
+                    <button className="ml-2" onClick={handleCancel}>Cancel</button>
 
                     {isTuesday && !isPastDate ? <div className="alert alert-danger"><p>The restaurant is closed on Tuesdays. Please choose another day.</p></div> : ""}
                     {isPastDate && !isTuesday ? <div className="alert alert-danger"><p>You picked a date that is in the past. Please choose a different date.</p></div> : ""}

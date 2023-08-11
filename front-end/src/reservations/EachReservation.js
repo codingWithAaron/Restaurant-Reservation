@@ -20,6 +20,7 @@ function EachReservation({ reservation }) {
           <p className="card-text">
             Number of People: {reservation.people}
           </p>
+          <a className="btn btn-primary" href={`/reservations/${reservation.reservation_id}/seat`}>Seat</a>
         </div>
       </div>
     </>

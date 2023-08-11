@@ -6,6 +6,7 @@ import { useRouteMatch } from "react-router-dom/cjs/react-router-dom";
 import { today, previous, next } from "../utils/date-time";
 import EachReservation from "../reservations/EachReservation";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import EachTable from "../tables/EachTable";
 
 /**
  * Defines the dashboard page.
@@ -21,6 +22,7 @@ function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   const [currentDate, setCurrentDate] = useState(date);
+  const [tables, setTables] = useState([])
 
   useEffect(loadDashboard, [currentDate]);
 
@@ -45,7 +47,16 @@ function Dashboard({ date }) {
     getDate();
   }, [query, route]);
 
-  if (reservations.length !== 0) {
+  useEffect(()=>{
+    async function getTables(){
+      const response = await fetch("http://localhost:5001/tables")
+      const data = await response.json()
+      setTables(data.data)
+    }
+    getTables()
+  },[])
+
+  if (reservations.length !== 0 && tables) {
     return (
       <main>
         <h1>Dashboard</h1>
@@ -77,12 +88,20 @@ function Dashboard({ date }) {
           >Next Day</button>
         </div>
         <ErrorAlert error={reservationsError} />
-        {reservations.map((reservation) => (
-          <EachReservation
-            reservation={reservation}
-            key={reservation.reservation_id}
-          />
-        ))}
+        <div>
+          {reservations.map((reservation) => (
+            <EachReservation
+              reservation={reservation}
+              key={reservation.reservation_id}
+            />
+          ))}
+        </div>
+        <div>
+          <h1>Tables</h1>
+        </div>
+        <div>
+          {tables.map((table) => <EachTable key={table.table_id} table={table} />)}
+        </div>
       </main>
     );
   } else {
@@ -115,6 +134,13 @@ function Dashboard({ date }) {
               setCurrentDate(next(currentDate));
             }}
           >Next Day</button>
+        </div>
+        <ErrorAlert error={reservationsError} />
+        <div>
+          <h1>Tables</h1>
+        </div>
+        <div>
+          {tables.map((table) => <EachTable key={table.table_id} table={table} />)}
         </div>
       </main>
     );
