@@ -5,6 +5,22 @@ function list(){
     .select("*")
 }
 
+function update(reservationSeat){
+    return knex("tables")
+    .select("*")
+    .where({table_id: reservationSeat.table_id})
+    .update(reservationSeat, "*")
+}
+
+function create(table){
+    return knex("tables")
+    .insert(table)
+    .returning("*")
+    .then((createdRecords) => createdRecords[0])
+}
+
 module.exports = {
-    list
+    list,
+    update,
+    create
 }

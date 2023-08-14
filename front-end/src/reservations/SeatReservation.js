@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useHistory, useParams } from "react-router-dom/cjs/react-router-dom.min";
 import ErrorAlert from "../layout/ErrorAlert";
 
 function SeatReservation(){
+    const { reservation_id } = useParams()
+    const initialData = {
+        table_id: "",
+        reservation_id: reservation_id
+    }
     const history = useHistory()
     const [error, setError] = useState(null)
     const [tables, setTables] = useState([])
+    const [formData, setFormData] = useState(initialData)
+
 
     useEffect(()=>{
         async function getTables(){
@@ -17,6 +24,12 @@ function SeatReservation(){
         getTables()
     },[])
 
+    function handleChange(event){
+        let newFormData = {...formData}
+        newFormData[event.target.name] = event.target.value
+        setFormData(newFormData)
+    }
+
     function handleCancel(){
         history.goBack()
     }
@@ -24,9 +37,13 @@ function SeatReservation(){
     async function handleSubmit(event){
         event.preventDefault()
         const abortController = new AbortController()
+        const formattedData = {
+            table_id: Number(formData.table_id),
+            reservation_id: Number(formData.reservation_id)
+        }
         
         try {
-            await axios.put("http://localhost:5001/tables/:table_id/seat/", )
+            await axios.put("http://localhost:5001/tables/:table_id/seat/", {data: formattedData})
             history.push("/dashboard")
             
         } catch (error) {
@@ -48,8 +65,9 @@ function SeatReservation(){
                         <form onSubmit={handleSubmit}>
                             <label htmlFor="table_id">
                                 Table:
-                                <select id="table_id" name="table_id">
-                                    {tables.map((table) => <option key={table.table_id}>{table.table_name} - Capacity: {table.capacity}</option>)}
+                                <select id="table_id" name="table_id" onChange={handleChange} value={formData.table_id} placeholder="Please pick a table.">
+                                    <option defaultValue={null} hidden>-- Select an Option --</option>
+                                    {tables.map((table) => table.reservation_id === null ? <option key={table.table_id} value={table.table_id}>{table.table_name} - Capacity: {table.capacity}</option> : "")}
                                 </select>
                             </label>
                             <button className="ml-2" type="submit">Submit</button>

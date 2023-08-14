@@ -7,7 +7,8 @@ function EachTable({ table }){
         return (
             <>
                 <div className="border border-dark p-3 mb-2">
-                    <p>{table.table_name}</p>
+                    <p>Table: {table.table_name}</p>
+                    <p data-table-id-status={table.table_id}> Status: {table.reservation_id === null ? "Free" : "Occupied"}</p>
                 </div>
             </>
         )
