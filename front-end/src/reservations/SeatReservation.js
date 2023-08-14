@@ -65,9 +65,9 @@ function SeatReservation(){
                         <form onSubmit={handleSubmit}>
                             <label htmlFor="table_id">
                                 Table:
-                                <select id="table_id" name="table_id" onChange={handleChange} value={formData.table_id} placeholder="Please pick a table.">
+                                <select id="table_id" name="table_id" onChange={handleChange} value={formData.table_id}>
                                     <option defaultValue={null} hidden>-- Select an Option --</option>
-                                    {tables.map((table) => table.reservation_id === null ? <option key={table.table_id} value={table.table_id}>{table.table_name} - Capacity: {table.capacity}</option> : "")}
+                                    {tables.map((table) => table.reservation_id === null ? <option key={table.table_id} value={table.table_id}>{table.table_name} - {table.capacity}</option> : "")}
                                 </select>
                             </label>
                             <button className="ml-2" type="submit">Submit</button>
