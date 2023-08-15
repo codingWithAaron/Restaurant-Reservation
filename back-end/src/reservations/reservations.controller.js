@@ -125,6 +125,16 @@ function validateTime(req, res, next){
   }
 }
 
+async function reservationExists(req, res, next){
+  const reservation = await service.read(req.params.reservation_id)
+  if(reservation){
+    res.locals.reservation = reservation
+    return next()
+  }else{
+    next({status: 404, message: `Reservation ${req.params.reservation_id} does not exist.`})
+  }
+}
+
 async function list(req, res) {
   const date = JSON.stringify(req.query.date)
   const data = await service.list(date)
@@ -141,6 +151,20 @@ async function create(req, res, next){
  res.status(201).json({data})
 }
 
+async function read(req, res, _next){
+  res.json({data: res.locals.reservation})
+}
+
+async function update(req, res, next){
+  const updatedReservation = {
+    ...req.body.data,
+    reservation_id: res.locals.reservation.reservation_id
+  }
+
+  const data = await service.update(updatedReservation)
+  res.json({data})
+}
+
 module.exports = {
   list,
   create: [
@@ -155,5 +179,19 @@ module.exports = {
     validateDateIsNotPast,
     validateTime,
     asyncErrorBoundary(create)
+  ],
+  read: [asyncErrorBoundary(reservationExists), read],
+  update: [
+    asyncErrorBoundary(reservationExists),
+    validateHasData,
+    validatePeople,
+    validateReservationDate,
+    validateReservationTime,
+    validatePhoneNumber,
+    validateLastName,
+    validateFirstName,
+    validateDateIsNotTuesday,
+    validateTime,
+    asyncErrorBoundary(update)
   ]
 };

@@ -14,7 +14,24 @@ function create(reservation){
 
 }
 
+function read(reservation_id){
+    return knex("reservations")
+    .select("*")
+    .where({reservation_id})
+    .then((createdRecords) => createdRecords[0])
+}
+
+function update(updatedReservation){
+    return knex("reservations")
+    .select("*")
+    .where({reservation_id: updatedReservation.reservation_id})
+    .update(updatedReservation, "*")
+    .then((updatedRecords) => updatedRecords[0])
+}
+
 module.exports = {
     list,
-    create
+    create,
+    read,
+    update
 }
