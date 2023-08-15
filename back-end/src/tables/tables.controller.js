@@ -21,6 +21,25 @@ function validateHasData(req, res, next){
     }
 }
 
+async function validateTableExists(req, res, next){
+    const data = await service.read(req.params.table_id)
+    
+    if(data){
+        next()
+    }else{
+        return next({status: 404, message: `Table ${req.params.table_id} does not exist.`})
+    }
+}
+
+async function validateTableIsNotOccupied(req, res, next){
+    const data = await service.read(req.params.table_id)
+    if(data.reservation_id === null){
+        return next({status: 400, message: `Table with id ${req.params.table_id} is not occupied.`})
+    }else{
+        next()
+    }
+}
+
 async function list(req, res, _next){
     const data = await service.list()
     res.json({data})
@@ -59,5 +78,9 @@ module.exports = {
         asyncErrorBoundary(update)
     ],
     create: [asyncErrorBoundary(create)],
-    delete: [asyncErrorBoundary(destroy)]
+    delete: [
+        asyncErrorBoundary(validateTableExists),
+        asyncErrorBoundary(validateTableIsNotOccupied),
+        asyncErrorBoundary(destroy)
+    ]
 }

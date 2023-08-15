@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom/cjs/react-router-dom";
+import ErrorAlert from "../layout/ErrorAlert";
 
 function EachTable({ table }){
     const history = useHistory()
@@ -30,6 +31,7 @@ function EachTable({ table }){
     }else{
         return (
             <>
+                <ErrorAlert error={error}/>
                 <div className="border border-dark p-3 mb-2">
                     <p>Table: {table.table_name}</p>
                     <p data-table-id-status={table.table_id}> Status: {table.reservation_id === null ? "Free" : "Occupied"}</p>
