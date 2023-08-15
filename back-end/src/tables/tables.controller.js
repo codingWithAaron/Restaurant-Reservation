@@ -30,7 +30,6 @@ async function update(req, res, _next){
  const reservationSeat = {
     ...req.body.data
  }
- console.log("This is the reservation seat ############", reservationSeat)
  const data = await service.update(reservationSeat)
  res.json({data})
 }
@@ -38,6 +37,17 @@ async function update(req, res, _next){
 async function create(req, res, _next){
     const data = await service.create(req.body.data)
     res.status(201).json({data})
+}
+
+async function destroy(req, res, _next){
+    const table = await service.read(req.params.table_id)
+    const updatedTable = {
+        ...table,
+        reservation_id: null
+    }
+
+    const data = await service.update(updatedTable)
+    res.json({data})
 }
 
 
@@ -49,4 +59,5 @@ module.exports = {
         asyncErrorBoundary(update)
     ],
     create: [asyncErrorBoundary(create)],
+    delete: [asyncErrorBoundary(destroy)]
 }

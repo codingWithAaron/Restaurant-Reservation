@@ -28,10 +28,15 @@ function read(table_id){
     .then((createdRecords) => createdRecords[0])
 }
 
+function destroy(){
+
+}
+
 
 module.exports = {
     list,
     update,
     create,
-    read
+    read,
+    destroy
 }
