@@ -20,6 +20,9 @@ function EachReservation({ reservation }) {
           <p className="card-text">
             Number of People: {reservation.people}
           </p>
+          <p className="card-text" data-reservation-id-status={reservation.reservation_id}>
+            Status: {reservation.status}
+          </p>
           <a className="btn btn-primary" href={`/reservations/${reservation.reservation_id}/seat`}>Seat</a>
         </div>
       </div>
