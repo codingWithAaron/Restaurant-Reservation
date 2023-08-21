@@ -91,7 +91,7 @@ function CreateReservation(){
         }
         
         try {
-            await axios.post("http://localhost:5001/reservations", {data: formDataCorrectTypes})
+            await axios.post("http://localhost:5001/reservations", {data: formDataCorrectTypes}, abortController.signal)
             history.push(`/dashboard?date=${formData.reservation_date}`)
             
         } catch (error) {

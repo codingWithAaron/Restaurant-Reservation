@@ -19,10 +19,10 @@ function EachTable({ table }) {
       try {
         await axios.put(
           `http://localhost:5001/reservations/${table.reservation_id}/status`,
-          {data: { status: "finished" } }
+          {data: { status: "finished" } }, abortController.signal
         );
         await axios.delete(
-          `http://localhost:5001/tables/${table.table_id}/seat`
+          `http://localhost:5001/tables/${table.table_id}/seat`, abortController.signal
         );
         history.push("/");
       } catch (error) {

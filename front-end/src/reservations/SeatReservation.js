@@ -43,7 +43,7 @@ function SeatReservation(){
         }
         
         try {
-            await axios.put(`http://localhost:5001/tables/${formattedData.table_id}/seat/`, {data: formattedData})
+            await axios.put(`http://localhost:5001/tables/${formattedData.table_id}/seat/`, {data: formattedData}, abortController.signal)
             history.push("/dashboard")
             
         } catch (error) {

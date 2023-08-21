@@ -32,7 +32,7 @@ function CreateTable(){
         }
         
         try {
-            await axios.post("http://localhost:5001/tables", {data: formDataCorrectTypes})
+            await axios.post("http://localhost:5001/tables", {data: formDataCorrectTypes}, abortController.signal)
             history.push("/dashboard")
             
         } catch (error) {
