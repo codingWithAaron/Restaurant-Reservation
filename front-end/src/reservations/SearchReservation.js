@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import ErrorAlert from "../layout/ErrorAlert";
 import axios from "axios";
 import EachReservation from "./EachReservation";
+require("dotenv").config();
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 function SearchReservation() {
   const initialFormData = {
@@ -22,7 +24,7 @@ function SearchReservation() {
     event.preventDefault();
     const abortController = new AbortController();
     try {
-      const response = await axios.get(`http://localhost:5001/reservations?mobile_number=${formData.mobile_number}`, abortController.signal);
+      const response = await axios.get(`${BASE_URL}/reservations?mobile_number=${formData.mobile_number}`, abortController.signal);
       const {data} = response.data
       setReservation(data)
       setLoaded(!loaded)

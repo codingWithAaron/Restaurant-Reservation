@@ -5,6 +5,8 @@ import { today, previous, next } from "../utils/date-time";
 import EachReservation from "../reservations/EachReservation";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import EachTable from "../tables/EachTable";
+require("dotenv").config()
+const BASE_URL = process.env.REACT_APP_API_BASE_URL
 
 /**
  * Defines the dashboard page.
@@ -33,7 +35,7 @@ function Dashboard({ date }) {
 
   useEffect(()=>{
     async function getTables(){
-      const response = await fetch("http://localhost:5001/tables")
+      const response = await fetch(`${BASE_URL}/tables`)
       const data = await response.json()
       setTables(data.data)
     }

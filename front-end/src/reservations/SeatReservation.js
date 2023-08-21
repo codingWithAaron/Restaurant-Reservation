@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useHistory, useParams } from "react-router-dom/cjs/react-router-dom.min";
 import ErrorAlert from "../layout/ErrorAlert";
+require("dotenv").config();
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 function SeatReservation(){
     const { reservation_id } = useParams()
@@ -17,7 +19,7 @@ function SeatReservation(){
 
     useEffect(()=>{
         async function getTables(){
-          const response = await fetch("http://localhost:5001/tables")
+          const response = await fetch(`${BASE_URL}/tables`)
           const data = await response.json()
           setTables(data.data)
         }
@@ -43,7 +45,7 @@ function SeatReservation(){
         }
         
         try {
-            await axios.put(`http://localhost:5001/tables/${formattedData.table_id}/seat/`, {data: formattedData}, abortController.signal)
+            await axios.put(`${BASE_URL}/tables/${formattedData.table_id}/seat/`, {data: formattedData}, abortController.signal)
             history.push("/dashboard")
             
         } catch (error) {

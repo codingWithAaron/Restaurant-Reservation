@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom/cjs/react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
+require("dotenv").config();
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 function EachTable({ table }) {
   const history = useHistory();
@@ -18,11 +20,11 @@ function EachTable({ table }) {
     ) {
       try {
         await axios.put(
-          `http://localhost:5001/reservations/${table.reservation_id}/status`,
+          `${BASE_URL}/reservations/${table.reservation_id}/status`,
           {data: { status: "finished" } }, abortController.signal
         );
         await axios.delete(
-          `http://localhost:5001/tables/${table.table_id}/seat`, abortController.signal
+          `${BASE_URL}/tables/${table.table_id}/seat`, abortController.signal
         );
         history.push("/");
       } catch (error) {
