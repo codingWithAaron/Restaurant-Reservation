@@ -5,6 +5,7 @@ function Form({handleSubmit, handleCancel, reservation, formData, setFormData}){
   const [isTuesday, setIsTuesday] = useState(false);
   const [isPastDate, setIsPastDate] = useState(false);
   const [before1030, setBefore1030] = useState(false);
+  const [after930, setAfter930] = useState(false);
 
   function isDateTuesday(date) {
     const selectedDate = new Date(`${date}T00:00:00`);
@@ -28,6 +29,12 @@ function Form({handleSubmit, handleCancel, reservation, formData, setFormData}){
     return selectedTime < earliestTime;
   }
 
+  function isAfter9(time) {
+    const selectedTime = new Date(`1970-01-01T${time}`);
+    const latestTime = new Date(`1970-01-01T21:30:00`);
+    return selectedTime > latestTime;
+  }
+
   function handleChange(event) {
     let newFormData = { ...formData };
     newFormData[event.target.name] = event.target.value;
@@ -45,6 +52,11 @@ function Form({handleSubmit, handleCancel, reservation, formData, setFormData}){
         setBefore1030(true);
       } else {
         setBefore1030(false);
+      }
+      if (isAfter9(event.target.value)) {
+        setAfter930(true);
+      }else{
+        setAfter930(false)
       }
     }
   }
@@ -79,6 +91,7 @@ function Form({handleSubmit, handleCancel, reservation, formData, setFormData}){
                     {isPastDate && !isTuesday ? <div className="alert alert-danger"><p>You picked a date that is in the past. Please choose a different date.</p></div> : ""}
                     {isTuesday && isPastDate ? <div className="alert alert-danger"><p>The restaurant is closed on Tuesdays. Please choose another day.</p> <p>You also picked a date that is in the past. Please choose a different date.</p></div> : ""}
                     {before1030 ? <div className="alert alert-danger"><p>Please choose a time after 10:30 AM.</p></div> : ""}
+                    {after930 ? <div className="alert alert-danger"><p>Please choose a time before 9:30 PM.</p></div> : ""}
                 </form>
             </div>
         </>
