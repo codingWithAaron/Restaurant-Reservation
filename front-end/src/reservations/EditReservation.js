@@ -21,43 +21,11 @@ function EditReservation() {
     status: "",
   };
   const [error, setError] = useState(null);
-  const [reservation, setReservation] = useState(initialData);
-  const [isTuesday, setIsTuesday] = useState(false);
-  const [isPastDate, setIsPastDate] = useState(false);
-  const [before1030, setBefore1030] = useState(false);
-  const [after930, setAfter930] = useState(false);
+  const [formData, setFormData] = useState(initialData);
   const reservationInfo = {
-    ...reservation,
-    reservation_date: reservation.reservation_date.substring(0, 10),
+    ...formData,
+    reservation_date: formData.reservation_date.substring(0, 10),
   };
-
-  function isDateTuesday(date) {
-    const selectedDate = new Date(`${date}T00:00:00`);
-    const dayOfWeek = selectedDate.getUTCDay();
-
-    return dayOfWeek === 2;
-  }
-
-  function isDateInPast(date) {
-    const selectedDate = new Date(`${date}T00:00:00`);
-    const currentDate = new Date();
-
-    selectedDate.setHours(0, 0, 0, 0);
-    currentDate.setHours(0, 0, 0, 0);
-    return selectedDate < currentDate;
-  }
-
-  function isBefore10(time) {
-    const selectedTime = new Date(`1970-01-01T${time}`);
-    const earliestTime = new Date(`1970-01-01T10:30:00`);
-    return selectedTime < earliestTime;
-  }
-
-  function isAfter9(time) {
-    const selectedTime = new Date(`1970-01-01T${time}`);
-    const latestTime = new Date(`1970-01-01T21:30:00`);
-    return selectedTime > latestTime;
-  }
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -67,7 +35,7 @@ function EditReservation() {
           `${BASE_URL}/reservations/${reservation_id}`
         );
         const data = response.data;
-        setReservation(data.data);
+        setFormData(data.data);
       }
       getReservation();
     } catch (error) {
@@ -82,42 +50,14 @@ function EditReservation() {
     history.goBack();
   }
 
-  function handleChange(event) {
-    let newFormData = { ...reservation };
-    newFormData[event.target.name] = event.target.value;
-    setReservation(newFormData);
-
-    if (event.target.name === "reservation_date") {
-      setIsTuesday(isDateTuesday(event.target.value));
-      if (isDateInPast(event.target.value)) {
-        setIsPastDate(true);
-      } else {
-        setIsPastDate(false);
-      }
-    } else if (event.target.name === "reservation_time") {
-      if (isBefore10(event.target.value)) {
-        setBefore1030(true);
-      } else {
-        setBefore1030(false);
-      }
-    }
-  }
-
   async function handleSubmit(event) {
     event.preventDefault();
     const abortController = new AbortController();
     const formDataCorrectTypes = {
-      ...reservation,
-      people: Number(reservation.people),
-      reservation_date: reservation.reservation_date.substring(0, 10)
+      ...formData,
+      people: Number(formData.people),
+      reservation_date: formData.reservation_date.substring(0, 10)
     };
-
-    if (reservation.reservation_time) {
-      if (isAfter9(reservation.reservation_time)) {
-        setAfter930(true);
-        return;
-      }
-    }
 
     try {
       await axios.put(
@@ -125,7 +65,7 @@ function EditReservation() {
         { data: formDataCorrectTypes },
         abortController.signal
       );
-      history.push(`/dashboard?date=${reservation.reservation_date}`);
+      history.push(`/dashboard?date=${formData.reservation_date}`);
     } catch (error) {
       if (error.name !== "AbortError") {
         setError(error);
@@ -134,7 +74,7 @@ function EditReservation() {
     return () => abortController.abort();
   }
 
-  if (reservation) {
+  if (formData) {
     return (
       <>
         <h1>Edit Reservation</h1>
@@ -142,12 +82,9 @@ function EditReservation() {
         <Form
           reservation={reservationInfo}
           handleSubmit={handleSubmit}
-          handleChange={handleChange}
           handleCancel={handleCancel}
-          after930={after930}
-          isTuesday={isTuesday}
-          isPastDate={isPastDate}
-          before1030={before1030}
+          formData={formData}
+          setFormData={setFormData}
         />
       </>
     );
