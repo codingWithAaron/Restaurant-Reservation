@@ -170,15 +170,20 @@ function validateBookedStatus(req, res, next) {
 	next();
 }
 
-async function list(req, res) {
-  const date = JSON.stringify(req.query.date)
-  const data = await service.list(date)
-  const sortedData = data.sort((elementA, elementB) => {
-    const timeA = new Date(`1970-01-01T${elementA.reservation_time}`)
-    const timeB = new Date(`1970-01-01T${elementB.reservation_time}`)
-    return timeA - timeB
-  })
-  res.json({data: sortedData});
+async function list(req, res, next) {
+  const date = req.query.date
+  const mobile_number = req.query.mobile_number
+  
+  if (date) {
+		const data = await service.listByDate(date);
+		res.json({ data });
+	} else if (mobile_number) {
+		const data = await service.search(mobile_number);
+		res.json({ data });
+	} else {
+		const data = await service.list();
+		res.json({ data });
+	}
 }
 
 async function create(req, res, next){
@@ -214,7 +219,7 @@ async function updateStatus(req, res, next){
 }
 
 module.exports = {
-  list,
+  list: [asyncErrorBoundary(list)],
   create: [
     validateHasData,
     validatePeople,
