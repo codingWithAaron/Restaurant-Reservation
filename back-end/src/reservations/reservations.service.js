@@ -4,6 +4,7 @@ function list(date){
     return knex("reservations")
     .select("*")
     .where({reservation_date : date})
+    .whereIn("status", ["seated", "booked"])
 }
 
 function create(reservation){
@@ -29,9 +30,18 @@ function update(updatedReservation){
     .then((updatedRecords) => updatedRecords[0])
 }
 
+function updateStatus(updatedReservation){
+    return knex("reservations")
+		.select("*")
+		.where({ reservation_id: updatedReservation.reservation_id })
+		.update({ status: updatedReservation.status }, "*")
+		.then((updatedRecords) => updatedRecords[0]);
+}
+
 module.exports = {
     list,
     create,
     read,
-    update
+    update,
+    updateStatus
 }
