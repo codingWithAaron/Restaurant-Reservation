@@ -95,8 +95,13 @@ Create a Table:
 
 ## Installation
 
-Install with npm
+### Clone the Repository
+
+Clone and Fork the repository.
+
+### Install with npm
 
 ```bash
   npm install
+  npm start
 ```
