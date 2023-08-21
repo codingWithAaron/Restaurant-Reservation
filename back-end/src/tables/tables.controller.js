@@ -119,6 +119,18 @@ function validateTableName(req, res, next){
     }
 }
 
+function validateIsSeated(req, res, next) {
+	const { status } = res.locals.reservation;
+
+	if (status === "seated") {
+		return next({
+			status: 400,
+			message: "This reservation is already seated",
+		});
+	}
+	next();
+}
+
 async function list(req, res, _next) {
   const data = await service.list();
   res.json({ data });
@@ -149,12 +161,19 @@ async function create(req, res, _next) {
 
 async function destroy(req, res, _next) {
   const table = await service.read(req.params.table_id);
+  const reservation = await reservationsService.read(table.reservation_id);
+
   const updatedTable = {
     ...table,
     reservation_id: null,
   };
+  const updatedReservation = {
+		...reservation,
+		status: "finished",
+	};
 
-  const data = await service.update(updatedTable);
+	await reservationsService.update(updatedReservation);
+	const data = await service.update(updatedTable);
   res.json({ data });
 }
 
@@ -165,6 +184,7 @@ module.exports = {
     validateHasReservationId,
     asyncErrorBoundary(validateTableExists),
     asyncErrorBoundary(validateReservationExists),
+    validateIsSeated,
     validateTableCanFitPeople,
     validateTableIsOccupied,
     asyncErrorBoundary(update),

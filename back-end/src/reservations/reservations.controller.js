@@ -135,6 +135,41 @@ async function reservationExists(req, res, next){
   }
 }
 
+function validateNotFinished(req, res, next) {
+	const { status } = res.locals.reservation;
+
+	if (status !== "booked" && status !== "seated") {
+		return next({
+			status: 400,
+			message: "A finished reservation cannot be updated",
+		});
+	}
+	next();
+}
+
+const StatusValues = ["booked", "seated", "finished", "cancelled"];
+
+function validateValidStatus(req, res, next) {
+	const { status } = req.body.data;
+
+	if (!StatusValues.includes(status)) {
+		return next({ status: 400, message: "unknown status" });
+	}
+	next();
+}
+
+function validateBookedStatus(req, res, next) {
+	const { status } = req.body.data;
+
+	if (status === "seated" || status === "finished") {
+		return next({
+			status: 400,
+			message: `cannot make reservations for ${status} status`,
+		});
+	}
+	next();
+}
+
 async function list(req, res) {
   const date = JSON.stringify(req.query.date)
   const data = await service.list(date)
@@ -165,6 +200,19 @@ async function update(req, res, next){
   res.json({data})
 }
 
+async function updateStatus(req, res, next){
+  const status = req.body.data.status
+  const { reservation_id } = res.locals.reservation
+
+  const updatedReservation = {
+    reservation_id: reservation_id,
+    status: status
+  }
+
+  const data = await service.updateStatus(updatedReservation)
+  res.json({ data })
+}
+
 module.exports = {
   list,
   create: [
@@ -178,6 +226,7 @@ module.exports = {
     validateDateIsNotTuesday,
     validateDateIsNotPast,
     validateTime,
+    validateBookedStatus,
     asyncErrorBoundary(create)
   ],
   read: [asyncErrorBoundary(reservationExists), read],
@@ -193,5 +242,11 @@ module.exports = {
     validateDateIsNotTuesday,
     validateTime,
     asyncErrorBoundary(update)
+  ],
+  updateStatus: [
+    asyncErrorBoundary(reservationExists),
+    validateValidStatus,
+    validateNotFinished,
+    asyncErrorBoundary(updateStatus)
   ]
 };
