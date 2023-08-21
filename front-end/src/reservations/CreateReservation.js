@@ -3,6 +3,8 @@ import axios from "axios"
 import { useHistory } from 'react-router-dom';
 import Form from "./Form";
 import ErrorAlert from "../layout/ErrorAlert";
+require("dotenv").config()
+const BASE_URL = process.env.REACT_APP_API_BASE_URL
 
 function CreateReservation(){
     const history = useHistory()
@@ -91,7 +93,7 @@ function CreateReservation(){
         }
         
         try {
-            await axios.post("http://localhost:5001/reservations", {data: formDataCorrectTypes}, abortController.signal)
+            await axios.post(`${BASE_URL}/reservations`, {data: formDataCorrectTypes}, abortController.signal)
             history.push(`/dashboard?date=${formData.reservation_date}`)
             
         } catch (error) {
