@@ -1,6 +1,6 @@
 # Restaurant Reservations
 
-The deployed application can be accessed here:
+The deployed application can be accessed here: https://restaurant-reservation-frontend-ybu8.onrender.com
 
 ## Description
 
