@@ -108,7 +108,7 @@ function CreateReservation(){
         <>
             <h1>Create a Reservation</h1>
             <ErrorAlert error={error} />
-            <Form handleSubmit={handleSubmit} handleChange={handleChange} handleCancel={handleCancel} formData={formData} after930={after930} isTuesday={isTuesday} isPastDate={isPastDate} before1030={before1030} />
+            <Form handleSubmit={handleSubmit} handleChange={handleChange} handleCancel={handleCancel} reservation={formData} after930={after930} isTuesday={isTuesday} isPastDate={isPastDate} before1030={before1030} />
         </>
     )
 }
