@@ -1,8 +1,41 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
+import { useHistory } from "react-router-dom/cjs/react-router-dom";
+import ErrorAlert from "../layout/ErrorAlert";
+require("dotenv").config();
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 function EachReservation({ reservation }) {
+  const history = useHistory();
+  const [error, setError] = useState(null);
+
+  async function handleCancel(event) {
+    event.preventDefault();
+    const abortController = new AbortController();
+
+    if (
+      window.confirm(
+        "Do you want to cancel this reservation? This cannot be undone."
+      )
+    ) {
+      try {
+        await axios.put(
+          `${BASE_URL}/reservations/${reservation.reservation_id}/status`,
+          {data: { status: "cancelled" } }, abortController.signal
+        );
+        history.push("/");
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          setError(error);
+        }
+      }
+      return () => abortController.abort();
+    }
+  }
+  
   return (
       <>
+        <ErrorAlert error={error} />
         <div className="card mb-3">
           <div className="card-body">
             <h5 className="card-title">
@@ -24,6 +57,8 @@ function EachReservation({ reservation }) {
               Status: {reservation.status}
             </p>
             {reservation.status !== "booked" ? "" : <a className="btn btn-primary" href={`/reservations/${reservation.reservation_id}/seat`}>Seat</a>}
+            <a className="btn btn-secondary ml-2" href={`/reservations/${reservation.reservation_id}/edit`}>Edit</a>
+            <button className="btn btn-danger ml-2" data-reservation-id-cancel={reservation.reservation_id} onClick={handleCancel}>Cancel</button>
           </div>
         </div>
       </>

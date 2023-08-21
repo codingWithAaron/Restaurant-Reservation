@@ -5,8 +5,8 @@ import { today, previous, next } from "../utils/date-time";
 import EachReservation from "../reservations/EachReservation";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import EachTable from "../tables/EachTable";
-require("dotenv").config()
-const BASE_URL = process.env.REACT_APP_API_BASE_URL
+require("dotenv").config();
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 /**
  * Defines the dashboard page.
@@ -26,7 +26,6 @@ function Dashboard({ date }) {
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
-    console.log(date)
     listReservations({ date: date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
