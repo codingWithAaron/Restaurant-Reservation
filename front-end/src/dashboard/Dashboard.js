@@ -37,7 +37,7 @@ function Dashboard({ date }) {
     const abortController = new AbortController();
     try {
       async function getTables(){
-        const response = await fetch(`${BASE_URL}/tables`)
+        const response = await fetch(`${BASE_URL}/tables`, abortController.signal)
         const data = await response.json()
         setTables(data.data)
       }

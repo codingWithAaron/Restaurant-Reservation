@@ -32,7 +32,7 @@ function EditReservation() {
     try {
       async function getReservation() {
         const response = await axios.get(
-          `${BASE_URL}/reservations/${reservation_id}`
+          `${BASE_URL}/reservations/${reservation_id}`, abortController.signal
         );
         const data = response.data;
         setFormData(data.data);
