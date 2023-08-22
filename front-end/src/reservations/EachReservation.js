@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useHistory } from "react-router-dom/cjs/react-router-dom";
+import { Link, useHistory } from "react-router-dom/cjs/react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 require("dotenv").config();
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -56,8 +56,8 @@ function EachReservation({ reservation }) {
             <p className="card-text" data-reservation-id-status={reservation.reservation_id}>
               Status: {reservation.status}
             </p>
-            {reservation.status !== "booked" ? "" : <a className="btn btn-primary" href={`/reservations/${reservation.reservation_id}/seat`}>Seat</a>}
-            <a className="btn btn-secondary ml-2" href={`/reservations/${reservation.reservation_id}/edit`}>Edit</a>
+            {reservation.status !== "booked" ? "" : <Link to={`/reservations/${reservation.reservation_id}/seat`} className="btn btn-primary" href={`/reservations/${reservation.reservation_id}/seat`}>Seat</Link>}
+            <Link to={`/reservations/${reservation.reservation_id}/edit`} className="btn btn-secondary ml-2" href={`/reservations/${reservation.reservation_id}/edit`}>Edit</Link>
             <button className="btn btn-danger ml-2" data-reservation-id-cancel={reservation.reservation_id} onClick={handleCancel}>Cancel</button>
           </div>
         </div>
