@@ -1,6 +1,7 @@
 import React, {useState} from "react";
+import ErrorAlert from "../layout/ErrorAlert";
 
-function Form({handleSubmit, handleCancel, reservation, formData, setFormData}){
+function Form({error, handleSubmit, handleCancel, reservation, formData, setFormData}){
 
   const [isTuesday, setIsTuesday] = useState(false);
   const [isPastDate, setIsPastDate] = useState(false);
@@ -91,7 +92,7 @@ function Form({handleSubmit, handleCancel, reservation, formData, setFormData}){
                     {isPastDate && !isTuesday ? <div className="alert alert-danger"><p>You picked a date that is in the past. Please choose a different date.</p></div> : ""}
                     {isTuesday && isPastDate ? <div className="alert alert-danger"><p>The restaurant is closed on Tuesdays. Please choose another day.</p> <p>You also picked a date that is in the past. Please choose a different date.</p></div> : ""}
                     {before1030 ? <div className="alert alert-danger"><p>Please choose a time after 10:30 AM.</p></div> : ""}
-                    {after930 ? <div className="alert alert-danger"><p>Please choose a time before 9:30 PM.</p></div> : ""}
+                    {error ? <ErrorAlert error={error} /> : null}
                 </form>
             </div>
         </>

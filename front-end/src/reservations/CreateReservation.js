@@ -57,8 +57,9 @@ function CreateReservation() {
         reservation={formData}
         formData={formData}
         setFormData={setFormData}
+        error={error}
       />
-      <ErrorAlert error={error} />
+      {/* <ErrorAlert error={error} /> */}
     </>
   );
 }
