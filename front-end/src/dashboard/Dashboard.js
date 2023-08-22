@@ -20,6 +20,7 @@ function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   const [tables, setTables] = useState([])
+  const [error, setError] = useState(null);
 
   useEffect(loadDashboard, [date]);
 
@@ -33,12 +34,21 @@ function Dashboard({ date }) {
   }
 
   useEffect(()=>{
-    async function getTables(){
-      const response = await fetch(`${BASE_URL}/tables`)
-      const data = await response.json()
-      setTables(data.data)
+    const abortController = new AbortController();
+    try {
+      async function getTables(){
+        const response = await fetch(`${BASE_URL}/tables`)
+        const data = await response.json()
+        setTables(data.data)
+      }
+      getTables()
+      
+    } catch (error) {
+      if (error.name !== "AbortError") {
+        setError(error);
+      }
     }
-    getTables()
+    return () => abortController.abort();
   },[])
 
   if (reservations.length !== 0 && tables) {
@@ -69,6 +79,7 @@ function Dashboard({ date }) {
             }}
           >Next Day</button>
         </div>
+        <ErrorAlert error={error} />
         <ErrorAlert error={reservationsError} />
         <div>
           {reservations.map((reservation) => (
@@ -114,6 +125,7 @@ function Dashboard({ date }) {
             }}
           >Next Day</button>
         </div>
+        <ErrorAlert error={error} />
         <ErrorAlert error={reservationsError} />
         <div>
           <h1>Tables</h1>

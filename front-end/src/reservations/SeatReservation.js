@@ -18,12 +18,21 @@ function SeatReservation(){
 
 
     useEffect(()=>{
-        async function getTables(){
-          const response = await fetch(`${BASE_URL}/tables`)
-          const data = await response.json()
-          setTables(data.data)
+        const abortController = new AbortController()
+        try {
+            async function getTables(){
+              const response = await fetch(`${BASE_URL}/tables`)
+              const data = await response.json()
+              setTables(data.data)
+            }
+            getTables()
+            
+        } catch (error) {
+            if(error.name !== "AbortError"){
+                setError(error)
+            }
         }
-        getTables()
+        return () => abortController.abort();
     },[])
 
     function handleChange(event){
