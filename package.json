@@ -7,6 +7,11 @@
     "type": "git",
     "url": "https://github.com/Thinkful-Ed/starter-restaurant-reservation"
   },
+  "jest": {
+    "moduleNameMapper": {
+      "axios": "axios/dist/node/axios.cjs"
+    }
+  },
   "scripts": {
     "build": "npm -prefix front-end run build",
     "preinstall": "cd ./back-end && npm install",
