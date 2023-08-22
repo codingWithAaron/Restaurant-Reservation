@@ -57,8 +57,8 @@ function EachReservation({ reservation }) {
               Status: {reservation.status}
             </p>
             {reservation.status !== "booked" ? "" : <Link to={`/reservations/${reservation.reservation_id}/seat`} className="btn btn-primary" href={`/reservations/${reservation.reservation_id}/seat`}>Seat</Link>}
-            <Link to={`/reservations/${reservation.reservation_id}/edit`} className="btn btn-secondary ml-2" href={`/reservations/${reservation.reservation_id}/edit`}>Edit</Link>
-            <button className="btn btn-danger ml-2" data-reservation-id-cancel={reservation.reservation_id} onClick={handleCancel}>Cancel</button>
+            {reservation.status !== "booked" ? "" : <Link to={`/reservations/${reservation.reservation_id}/edit`} className="btn btn-secondary ml-2" href={`/reservations/${reservation.reservation_id}/edit`}>Edit</Link>}
+            {reservation.status !== "booked" ? "" : <button className="btn btn-danger ml-2" data-reservation-id-cancel={reservation.reservation_id} onClick={handleCancel}>Cancel</button>}
           </div>
         </div>
       </>

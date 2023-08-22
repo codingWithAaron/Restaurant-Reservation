@@ -245,6 +245,7 @@ module.exports = {
     validateLastName,
     validateFirstName,
     validateDateIsNotTuesday,
+    validateDateIsNotPast,
     validateTime,
     asyncErrorBoundary(update)
   ],
