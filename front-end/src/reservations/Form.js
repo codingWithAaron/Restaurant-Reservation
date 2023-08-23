@@ -74,7 +74,7 @@ function Form({error, handleSubmit, handleCancel, reservation, formData, setForm
 
 
                     <label htmlFor="mobile_number">Mobile Number:</label>
-                    <input id="mobile_number" name="mobile_number" type="text" pattern="^\d{3}-\d{3}-\d{4}$" title="Please enter a valid 10 digit phone number." placeholder="123-456-7890" required value={reservation.mobile_number} onChange={handleChange} />
+                    <input id="mobile_number" name="mobile_number" type="text" title="Please enter a valid 10 digit phone number." placeholder="123-456-7890" pattern="[0-9\-]*" required value={reservation.mobile_number} onChange={handleChange} />
 
                     <label htmlFor="reservation_date">Reservation Date:</label>
                     <input id="reservation_date" name="reservation_date" type="date" required value={reservation.reservation_date} onChange={handleChange} />
